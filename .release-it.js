@@ -14,6 +14,7 @@ module.exports = {
     pushArgs: ['--follow-tags'],
     requireCleanWorkingDir: debug ? false : true,
     requireUpstream: debug ? false : true,
+    getLatestTagFromAllRefs: true
     // changelog: 'git log --pretty=format:%s ${latestTag}...HEAD' // this is overridden by the @release-it/conventional-changelog's changelog
   },
   github: {
