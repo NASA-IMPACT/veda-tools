@@ -76,9 +76,9 @@ jobs:
       - name: Release It!
         run: |
           if [[ "${{ needs.define-environment.outputs.env_name }}" == "pre-production" ]]; then
-            npm run release-rc-ci
+            npm run pre-release-rc
           elif [[ "${{ needs.define-environment.outputs.env_name }}" == "pre-staging" ]]; then
-            npm run release-alpha-ci
+            npm run pre-release-alpha
           else
             echo "Unsupported environment: ${{ needs.define-environment.outputs.env_name }} for pre-release. Make a PR to main or develop to trigger a pre-release."
             exit 1
