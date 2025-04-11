@@ -51,7 +51,9 @@ jobs:
           fi
         shell: bash
       - name: Checkout 🛎️
-        uses: actions/checkout@v4      
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
       - name: Read Node.js version from .nvmrc
         id: nvm
         run: echo "::set-output name=NODE_VERSION::$(cat .nvmrc)"
