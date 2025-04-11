@@ -8,11 +8,6 @@ concurrency:
     group: ${{ github.workflow }}-${{ github.ref }}
     cancel-in-progress: true
 
-env:
-  S3_BUCKET: ${{ vars.DEPLOYMENT_BUCKET }}
-  WEB_DISTRIBUTION_URL: ${{ vars.PREVIEW_WEB_DISTRIBUTION_URL }}
-  PR_STRING: pr-preview-${{ github.event.number }}
-
 jobs:
   define-environment:
     name: Set environment
@@ -37,9 +32,7 @@ jobs:
     environment: ${{ needs.define-environment.outputs.env_name }}
     
     permissions:
-      id-token: write
-      contents: read
-      pull-requests: write
+      contents: write
     
     steps:
       - name: Validate required variables and secrets
