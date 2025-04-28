@@ -1,7 +1,7 @@
 {
   "name": "custom-interface-ui-library",
   "description": "A React UI component library and custom interface template for GIS application.",
-  "version": "0.0.0",
+  "version": "0.0.1-alpha.0",
   "author": "<sanzog03@gmail.com>",
   "repository": {
     "type": "git",
