@@ -9,6 +9,9 @@
   },
   "license": "Apache-2.0",
   "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "homepage": "https://github.com/NASA-IMPACT/veda-tools.git",
   "main": "dist/lib/main.js",
   "source": "src/components/index.js",
