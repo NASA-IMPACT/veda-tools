@@ -1,12 +1,30 @@
 {
-  "name": "interface-template",
-  "version": "1.0.0",
-  "private": true,
-  "homepage": ".",
+  "name": "@teamimpact/veda-tools",
+  "description": "A React UI component library to build custom-interfaces for GIS application.",
+  "version": "0.0.1-alpha.4",
+  "author": "<sanzog03@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NASA-IMPACT/veda-tools.git"
+  },
+  "license": "Apache-2.0",
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "homepage": "https://github.com/NASA-IMPACT/veda-tools.git",
+  "main": "dist/lib/main.js",
+  "source": "src/components/index.js",
+  "module": "dist/lib/module.js",
   "dependencies": {
     "@date-io/moment": "^3.0.0",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
+    "@fortawesome/fontawesome-svg-core": "^6.6.0",
+    "@fortawesome/free-brands-svg-icons": "^6.6.0",
+    "@fortawesome/free-regular-svg-icons": "^6.6.0",
+    "@fortawesome/free-solid-svg-icons": "^6.6.0",
+    "@fortawesome/react-fontawesome": "^0.2.2",
     "@mui/icons-material": "^6.1.6",
     "@mui/material": "^6.1.6",
     "@mui/x-date-pickers": "^7.22.0",
@@ -18,38 +36,39 @@
     "@types/node": "^16.7.13",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
+    "chart.js": "^4.4.3",
+    "chartjs-adapter-luxon": "^1.3.1",
+    "chartjs-plugin-annotation": "^3.0.1",
+    "chartjs-plugin-zoom": "^2.0.1",
     "d3": "^7.9.0",
+    "luxon": "^3.5.0",
     "mapbox-gl": "^3.7.0",
     "mapboxgl-timeline": "^1.0.2",
     "moment": "^2.30.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-loader-spinner": "^6.1.6",
+    "react-resizable-panels": "^2.1.1",
     "react-router-dom": "^6.27.0",
-    "react-scripts": "5.0.1",
     "styled-components": "^6.1.13",
     "typescript": "^4.4.2",
     "uuid": "^11.0.3",
-    "web-vitals": "^2.1.0",
-    "chart.js": "^4.4.3",
-    "chartjs-adapter-luxon": "^1.3.1",
-    "chartjs-plugin-annotation": "^3.0.1",
-    "chartjs-plugin-zoom": "^2.0.1",
-    "@fortawesome/fontawesome-svg-core": "^6.6.0",
-    "@fortawesome/free-brands-svg-icons": "^6.6.0",
-    "@fortawesome/free-regular-svg-icons": "^6.6.0",
-    "@fortawesome/free-solid-svg-icons": "^6.6.0",
-    "@fortawesome/react-fontawesome": "^0.2.2",
-    "luxon": "^3.5.0",
-    "react-resizable-panels": "^2.1.1"
+    "web-vitals": "^2.1.0"
   },
   "scripts": {
-    "start": "craco start",
-    "build": "craco build",
-    "test": "craco test",
-    "eject": "react-scripts eject",
+    "start": "parcel",
+    "build": "parcel build",
+    "build-lib": "parcel build ./src/components/index.js --dist-dir=dist/lib",
+    "release": "release-it --ci",
+    "release-beta": "release-it --preRelease=beta --ci",
+    "pre-release-alpha": "release-it --preRelease=alpha --ci --no-git.requireBranch",
+    "pre-release-rc": "release-it --preRelease=rc --ci --no-git.requireBranch",
+    "release-test": "release-it --dry-run",
+    "release-first-version": "release-it major",
+    "watch": "parcel watch",
+    "test": "jest",
     "format": "prettier --write .",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint": "eslint src",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "fix-conflicts": "prettier --write . && eslint . --fix"
   },
@@ -72,13 +91,53 @@
     ]
   },
   "resolutions": {
-    "styled-components": "^5"
+    "styled-components": "^5",
+    "conventional-changelog-conventionalcommits": "8.0.0"
   },
   "devDependencies": {
-    "@craco/craco": "^7.1.0",
-    "eslint": "^8.56.0",
+    "@parcel/packager-raw-url": "2.13.3",
+    "@parcel/transformer-webmanifest": "2.13.3",
+    "@release-it/conventional-changelog": "^10.0.0",
+    "babel-jest": "^27.4.2",
+    "babel-preset-react-app": "^10.0.1",
+    "browserslist": ">= 4",
+    "conventional-changelog-conventionalcommits": "^8.0.0",
+    "conventional-recommended-bump": "^11.0.0",
+    "eslint": "^8.3.0",
     "eslint-config-prettier": "^10.0.1",
+    "eslint-config-react-app": "^7.0.1",
     "eslint-plugin-prettier": "^5.2.3",
-    "prettier": "^3.4.2"
+    "git-semver-tags": "^8.0.0",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^27.4.3",
+    "jest-watch-typeahead": "^1.0.0",
+    "parcel": "^2.13.3",
+    "parcel-resolver-tspaths": "^0.0.9",
+    "postcss": ">= 8",
+    "postcss-normalize": "^13.0.1",
+    "prettier": "^3.4.2",
+    "process": "^0.11.10",
+    "release-it": "^18.1.2",
+    "semver": "^7.7.1"
+  },
+  "peerDependencies": {
+    "@mui/icons-material": "^6.1.6",
+    "@mui/material": "^6.1.6",
+    "@mui/x-date-pickers": "^7.22.0",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0"
+  },
+  "targets": {
+    "custom-interfafce-app": {
+      "source": "public/index.html",
+      "context": "browser"
+    }
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "alias": {
+    "$components": "./src/components",
+    "$context": "./src/context/"
   }
 }

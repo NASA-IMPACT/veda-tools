@@ -17,6 +17,10 @@ run `yarn`
 - create `.env.local` a copy of `.env.local-sample` with the appropriate tokens
 - run `yarn start`
 
-## Bundle using webpack
+## Bundle using parcel
 
 run `yarn build`
+
+## Packaging CJS and EJS library using parcel
+
+run `yarn build-lib`

@@ -1,0 +1,90 @@
+name: Pre-Release on Pull Request
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+  define-environment:
+    name: Set environment
+    runs-on: ubuntu-latest
+    outputs:
+      env_name: ${{ steps.define_environment.outputs.env_name }}
+    steps:
+      - name: Set environment based on the branch the PR is made against.
+        id: define_environment
+        run: |
+          if [ "${{ github.event.pull_request.base.ref }}" = "main" ]; then
+            echo "env_name=pre-production" >> $GITHUB_OUTPUT
+          elif [ "${{ github.event.pull_request.base.ref }}" = "develop" ]; then
+            echo "env_name=pre-staging" >> $GITHUB_OUTPUT
+          fi
+      - name: print the environment
+        run: echo "The environment is ${{ steps.define_environment.outputs.env_name }}"
+
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    needs: define-environment
+    environment: ${{ needs.define-environment.outputs.env_name }}
+    
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Validate required variables and secrets
+        run: |
+          missing_vars=()
+
+          # Check for required variables
+          [ -z "${{ secrets.GITHUB_TOKEN }}" ] && missing_vars+=("secrets.GITHUB_TOKEN")
+          [ -z "${{ secrets.NPM_TOKEN }}" ] && missing_vars+=("secrets.NPM_TOKEN")
+
+          # If any variables are missing, print them and exit with an error
+          if [ ${#missing_vars[@]} -ne 0 ]; then
+            echo "Error: The following required variables are missing:"
+            printf '%s\n' "${missing_vars[@]}"
+            exit 1
+          fi
+        shell: bash
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+      - name: Read Node.js version from .nvmrc
+        id: nvm
+        run: echo "::set-output name=NODE_VERSION::$(cat .nvmrc)"
+      - name: Set Node version to v${{ steps.nvm.outputs.NODE_VERSION }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ steps.nvm.outputs.NODE_VERSION }}
+      - name: Install Yarn
+        run: npm install -g yarn
+      - name: Install Dependencies
+        run: yarn
+      - name: Bundle Package
+        run: yarn build-lib
+      - name: Git config
+        run: |
+          git config user.name "${GITHUB_ACTOR}"
+          git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+      - name: NPM config
+        run: npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Release It!
+        run: |
+          if [[ "${{ needs.define-environment.outputs.env_name }}" == "pre-production" ]]; then
+            npm run pre-release-rc
+          elif [[ "${{ needs.define-environment.outputs.env_name }}" == "pre-staging" ]]; then
+            npm run pre-release-alpha
+          else
+            echo "Unsupported environment: ${{ needs.define-environment.outputs.env_name }} for pre-release. Make a PR to main or develop to trigger a pre-release."
+            exit 1
+          fi
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

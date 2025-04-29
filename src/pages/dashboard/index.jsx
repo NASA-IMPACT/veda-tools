@@ -15,7 +15,7 @@ import {
   Search,
   FilterByDate,
   VizItemAnimation,
-} from '@components';
+} from '$components';
 
 import styled from 'styled-components';
 
