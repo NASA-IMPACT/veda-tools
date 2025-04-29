@@ -1,6 +1,6 @@
 {
-  "short_name": "Custom Interfaces Template",
-  "name": "Template for Custom Interfaces",
+  "short_name": "Veda Tools",
+  "name": "A React component library to extend Veda capability via custom tools.",
   "icons": [
     {
       "src": "./favicon.ico",

@@ -76,7 +76,7 @@ module.exports = {
 // helpers
 
 function getReleaseNotes(config) {
-  if (!config || !config || !config.changelog) return "🦗";
+  if (!config || !config.changelog) return "🦗";
   const changelog = `## What's changed on version:\n` + config.changelog;
   return changelog;
 }
