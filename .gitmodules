@@ -6,3 +6,7 @@
 	path = src/components/interfaces/emit
 	url = https://github.com/US-GHG-Center/custom-emit-interface.git
 	branch = veda-tools
+[submodule "src/components/interfaces/goes"]
+	path = src/components/interfaces/goes
+	url = https://github.com/US-GHG-Center/custom-interfaces.git
+	branch = goes/veda-tools
