@@ -13,9 +13,6 @@
     "access": "public"
   },
   "homepage": "https://github.com/NASA-IMPACT/veda-tools.git",
-  "main": "dist/lib/main.js",
-  "source": "src/components/index.js",
-  "module": "dist/lib/module.js",
   "dependencies": {
     "@date-io/moment": "^3.0.0",
     "@emotion/react": "^11.13.3",
@@ -28,6 +25,7 @@
     "@mui/icons-material": "^6.1.6",
     "@mui/material": "^6.1.6",
     "@mui/x-date-pickers": "^7.22.0",
+    "@swc/helpers": "^0.5.3",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.2.1",
@@ -55,10 +53,60 @@
     "uuid": "^11.0.3",
     "web-vitals": "^2.1.0"
   },
+  "exports": {
+    ".": {
+      "import": "./dist/main/index.js",
+      "require": "./dist/main/index.js"
+    },
+    "./core/components": {
+      "import": "./dist/core/components/index.js",
+      "require": "./dist/core/components/index.js"
+    },
+    "./custom-interfaces/emit": {
+      "import": "./dist/custom-interfaces/emit/index.js",
+      "require": "./dist/custom-interfaces/emit/index.js"
+    },
+    "./custom-interfaces/noaa": {
+      "import": "./dist/custom-interfaces/noaa/index.js",
+      "require": "./dist/custom-interfaces/noaa/index.js"
+    }
+  },
+  "targets": {
+    "main": {
+      "source": "src/lib/index.ts",
+      "distDir": "dist/main",
+      "context": "node",
+      "isLibrary": true
+    },
+    "components": {
+      "source": "src/components/index.ts",
+      "distDir": "dist/core/components",
+      "context": "node",
+      "isLibrary": true
+    },
+    "emit": {
+      "source": "custom-interfaces/emit/src/lib/index.ts",
+      "distDir": "dist/custom-interfaces/emit",
+      "context": "node",
+      "isLibrary": true
+    },
+    "noaa": {
+      "source": "custom-interfaces/noaa/src/lib/index.ts",
+      "distDir": "dist/custom-interfaces/noaa",
+      "context": "node",
+      "isLibrary": true
+    },
+    "custom-interface-app": {
+      "source": "public/index.html",
+      "context": "browser"
+    }
+  },
   "scripts": {
     "start": "parcel",
     "build": "parcel build",
-    "build-lib": "parcel build ./src/components/index.js --dist-dir=dist/lib",
+    "build:main": "parcel build main",
+    "build:components": "parcel build components",
+    "clean": "rm -rf node_modules  dist yarn.lock package-lock.json .parcel-cache  && yarn cache clean",
     "release": "release-it --ci",
     "release-beta": "release-it --preRelease=beta --ci",
     "pre-release-alpha": "release-it --preRelease=alpha --ci --no-git.requireBranch",
@@ -95,8 +143,8 @@
     "conventional-changelog-conventionalcommits": "8.0.0"
   },
   "devDependencies": {
-    "@parcel/packager-raw-url": "2.13.3",
-    "@parcel/transformer-webmanifest": "2.13.3",
+    "@parcel/packager-raw-url": "2.15.4",
+    "@parcel/transformer-webmanifest": "2.15.4",
     "@release-it/conventional-changelog": "^10.0.0",
     "babel-jest": "^27.4.2",
     "babel-preset-react-app": "^10.0.1",
@@ -118,20 +166,16 @@
     "prettier": "^3.4.2",
     "process": "^0.11.10",
     "release-it": "^18.1.2",
-    "semver": "^7.7.1"
+    "semver": "^7.7.1",
+    "react-tooltip": "^5.28.0"
   },
   "peerDependencies": {
     "@mui/icons-material": "^6.1.6",
     "@mui/material": "^6.1.6",
     "@mui/x-date-pickers": "^7.22.0",
     "@types/react": "^18.0.0",
-    "@types/react-dom": "^18.0.0"
-  },
-  "targets": {
-    "custom-interfafce-app": {
-      "source": "public/index.html",
-      "context": "browser"
-    }
+    "@types/react-dom": "^18.0.0",
+    "react-tooltip": "^5.28.0"
   },
   "engines": {
     "node": ">=18.0.0"
