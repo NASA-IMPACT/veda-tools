@@ -1,16 +1,16 @@
 // Main Map Components
-export { MainMap } from './map/mainMap/index.jsx';
-export { useMapbox } from '../context/mapContext/index.js';
-export { MapControls } from './map/mapControls/index.jsx';
+export { MainMap } from './core/map/mainMap/index.jsx';
+export { useMapbox } from './context/mapContext';
+export { MapControls } from './core/map/mapControls/index.jsx';
 
 // Map Features
-export { VizItemAnimation } from './map/itemAnimation/index.jsx';
-export { MeasurementLayer } from './map/measurementLayer';
-export { MarkerFeature } from './map/mapMarker';
-export { MapZoom } from './map/mapZoom';
+export { VizItemAnimation } from './core/map/itemAnimation/index.jsx';
+export { MeasurementLayer } from './core/map/measurementLayer/index.jsx';
+export { MarkerFeature } from './core/map/mapMarker/index.jsx';
+export { MapZoom } from './core/map/mapZoom/index.jsx';
 
 // Map Layers
-export { VisualizationLayers } from './map/mapLayer';
+export { VisualizationLayers } from './core/map/mapLayer/index.jsx';
 
 // Method Components
 export { FilterByDate } from './method/filter';
@@ -29,6 +29,6 @@ export {
   addSourceLayerToMap,
   layerExists,
   sourceExists,
-} from './map/utils';
+} from './core/map/utils/index.js';
 
 // Add other component exports here as needed

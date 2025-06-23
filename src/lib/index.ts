@@ -1,3 +1,3 @@
 export * from '../components';
-export { EmitInterface } from '../../custom-interfaces';
-export { NoaaInterface } from '../../custom-interfaces';
+export { EmitInterface } from '../components/interfaces';
+export { NoaaInterface } from '../components/interfaces';

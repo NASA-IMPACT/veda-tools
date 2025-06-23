@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useChart } from '../../context/chartContext';
+import { useChart } from '../../../context/chartContext';
 
 export const LineChart = ({ data, labels, legend, labelX, labelY, color="#ff6384", index=0, separateY=false }) => {
   // data should be an array of vector points

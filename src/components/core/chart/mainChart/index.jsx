@@ -1,4 +1,4 @@
-import { ChartProvider } from '../../context/chartContext';
+import { ChartProvider } from '../../../context/chartContext';
 import './index.css';
 
 const MainChart = ({ children }) => {

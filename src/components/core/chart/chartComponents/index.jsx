@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark, faRotateLeft, faCircleInfo, faExternalLink } from '@fortawesome/free-solid-svg-icons';
 import { useState, useEffect } from 'react';
-import { useChart } from '../../context/chartContext';
+import { useChart } from '../../../context/chartContext';
 
 
 export const ChartTitle = ({ children }) => {
