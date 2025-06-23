@@ -58,17 +58,17 @@
       "import": "./dist/main/index.js",
       "require": "./dist/main/index.js"
     },
-    "./core/components": {
-      "import": "./dist/core/components/index.js",
-      "require": "./dist/core/components/index.js"
+    "./components/core": {
+      "import": "./dist/components/core/index.js",
+      "require": "./dist/components/core/index.js"
     },
-    "./custom-interfaces/emit": {
-      "import": "./dist/custom-interfaces/emit/index.js",
-      "require": "./dist/custom-interfaces/emit/index.js"
+    "./interfaces/emit": {
+      "import": "./dist/components/interfaces/emit/index.js",
+      "require": "./dist/components/interfaces/emit/index.js"
     },
-    "./custom-interfaces/noaa": {
-      "import": "./dist/custom-interfaces/noaa/index.js",
-      "require": "./dist/custom-interfaces/noaa/index.js"
+    "./interfaces/noaa": {
+      "import": "./dist/components/interfaces/noaa/index.js",
+      "require": "./dist/components/interfaces/noaa/index.js"
     }
   },
   "targets": {
@@ -79,20 +79,20 @@
       "isLibrary": true
     },
     "components": {
-      "source": "src/components/index.ts",
-      "distDir": "dist/core/components",
+      "source": "src/components/core/index.ts",
+      "distDir": "dist/components/core",
       "context": "node",
       "isLibrary": true
     },
     "emit": {
-      "source": "custom-interfaces/emit/src/lib/index.ts",
-      "distDir": "dist/custom-interfaces/emit",
+      "source": "src/components/interfaces/emit/src/lib/index.ts",
+      "distDir": "dist/components/interfaces/emit",
       "context": "node",
       "isLibrary": true
     },
     "noaa": {
-      "source": "custom-interfaces/noaa/src/lib/index.ts",
-      "distDir": "dist/custom-interfaces/noaa",
+      "source": "src/components/interfaces/noaa/src/lib/index.ts",
+      "distDir": "dist/components/interfaces/noaa",
       "context": "node",
       "isLibrary": true
     },
