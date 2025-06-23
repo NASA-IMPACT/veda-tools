@@ -1,0 +1,9 @@
+[submodule ".custom-interfaces/emit"]
+	path = .custom-interfaces/emit
+	url = https://github.com/US-GHG-Center/custom-emit-interface.git
+	branch = veda-tools
+
+[submodule "custom-interfaces/noaa"]
+	path = custom-interfaces/noaa
+	url = https://github.com/US-GHG-Center/ghgc-noaa-interface.git
+	branch = veda-tools
