@@ -10,3 +10,11 @@
 	path = src/components/interfaces/goes
 	url = https://github.com/US-GHG-Center/custom-interfaces.git
 	branch = goes/veda-tools
+[submodule "src/components/interfaces/nist"]
+	path = src/components/interfaces/nist
+	url = https://github.com/US-GHG-Center/custom-interfaces.git
+	branch = nist/veda-tools
+[submodule "src/components/interfaces/urban"]
+	path = src/components/interfaces/urban
+	url = https://github.com/US-GHG-Center/custom-interfaces.git
+	branch = urban/create-lib
