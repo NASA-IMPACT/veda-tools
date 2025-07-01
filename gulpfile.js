@@ -125,7 +125,7 @@ function installDeps(cb) {
  */
 function buildMain(cb) {
   console.log('🚀 Building libraries');
-  exec('yarn build-lib', (err, stdout, stderr) => {
+  exec('yarn build', (err, stdout, stderr) => {
     if (err) return cb(err);
     console.log(stdout);
     cb();

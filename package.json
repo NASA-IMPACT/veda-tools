@@ -90,7 +90,7 @@
   "scripts": {
     "start": "parcel",
     "build-lib": "yarn gulp",
-    "build": "yarn build",
+    "build": "parcel build",
     "build:main": "parcel build main",
     "build:components": "parcel build components",
     "clean": "rm -rf node_modules  dist yarn.lock package-lock.json .parcel-cache  && yarn cache clean",
