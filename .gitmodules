@@ -14,3 +14,7 @@
 	path = src/components/interfaces/nist
 	url = https://github.com/US-GHG-Center/custom-interfaces.git
 	branch = nist/veda-tools
+[submodule "src/components/interfaces/urban"]
+	path = src/components/interfaces/urban
+	url = https://github.com/US-GHG-Center/custom-interfaces.git
+	branch = urban/veda-tools
