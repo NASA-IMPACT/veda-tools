@@ -66,7 +66,9 @@ jobs:
       - name: Install Dependencies
         run: yarn
       - name: Bundle Package
-        run: yarn build-lib
+        run: | 
+          yarn build-lib
+          git status 
       - name: Git config
         run: |
           git config user.name "${GITHUB_ACTOR}"
