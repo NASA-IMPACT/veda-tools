@@ -1,7 +1,7 @@
 {
   "name": "@teamimpact/veda-tools",
   "description": "A React UI component library to build custom-interfaces for GIS application.",
-  "version": "0.0.1-alpha.5",
+  "version": "0.0.1-alpha.4",
   "author": "<sanzog03@gmail.com>",
   "repository": {
     "type": "git",
@@ -21,6 +21,10 @@
     "./components/core": {
       "import": "./dist/components/core/index.js",
       "require": "./dist/components/core/index.js"
+    },
+    "./components": {
+      "import": "./dist/components/index.js",
+      "require": "./dist/components/index.js"
     },
     "./interfaces/emit": {
       "import": "./dist/components/interfaces/emit/index.js",
@@ -51,6 +55,12 @@
       "isLibrary": true
     },
     "components": {
+      "source": "src/components/index.ts",
+      "distDir": "dist/components",
+      "context": "node",
+      "isLibrary": true
+    },
+    "core": {
       "source": "src/components/core/index.ts",
       "distDir": "dist/components/core",
       "context": "node",
