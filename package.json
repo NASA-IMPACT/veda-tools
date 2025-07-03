@@ -22,9 +22,13 @@
       "import": "./dist/components/core/index.js",
       "require": "./dist/components/core/index.js"
     },
-    "./components": {
-      "import": "./dist/components/index.js",
-      "require": "./dist/components/index.js"
+    "./components/ui": {
+      "import": "./dist/components/ui/index.js",
+      "require": "./dist/components/ui/index.js"
+    },
+    "./components/method": {
+      "import": "./dist/components/method/index.js",
+      "require": "./dist/components/method/index.js"
     },
     "./interfaces/emit": {
       "import": "./dist/components/interfaces/emit/index.js",
@@ -54,9 +58,15 @@
       "context": "node",
       "isLibrary": true
     },
-    "components": {
-      "source": "src/components/index.ts",
-      "distDir": "dist/components",
+    "ui": {
+      "source": "src/components/ui/index.ts",
+      "distDir": "dist/components/ui",
+      "context": "node",
+      "isLibrary": true
+    },
+    "method": {
+      "source": "src/components/method/index.ts",
+      "distDir": "dist/components/method",
       "context": "node",
       "isLibrary": true
     },
