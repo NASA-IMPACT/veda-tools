@@ -20,5 +20,5 @@
 	branch = urban/veda-tools
 [submodule "src/components/interfaces/cloudbrowse"]
 	path = src/components/interfaces/cloudbrowse
-	url = https://github.com/US-GHG-Center/ghgc-s3browse
+	url = https://github.com/US-GHG-Center/ghgc-s3browse.git
 	branch = main
