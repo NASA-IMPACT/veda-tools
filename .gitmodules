@@ -18,7 +18,7 @@
 	path = src/components/interfaces/urban
 	url = https://github.com/US-GHG-Center/custom-interfaces.git
 	branch = urban/veda-tools
-[submodule "src/components/interfaces/cloudbrowse"]
-	path = src/components/interfaces/cloudbrowse
+[submodule "src/components/interfaces/cloudBrowse"]
+	path = src/components/interfaces/cloudBrowse
 	url = https://github.com/US-GHG-Center/ghgc-s3browse.git
 	branch = main
