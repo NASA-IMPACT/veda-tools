@@ -21,4 +21,4 @@
 [submodule "src/components/interfaces/cloudBrowse"]
 	path = src/components/interfaces/cloudBrowse
 	url = https://github.com/US-GHG-Center/ghgc-s3browse.git
-	branch = main
+	branch = veda-tools
