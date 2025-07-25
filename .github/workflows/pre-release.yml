@@ -63,6 +63,8 @@ jobs:
           node-version: ${{ steps.nvm.outputs.NODE_VERSION }}
       - name: Install Yarn
         run: npm install -g yarn
+      - name: Install dependencies 
+        run: yarn 
       - name: Install dependencies  and Bundle Package
         run: | 
           yarn build-lib
