@@ -27,5 +27,7 @@ export {
   CloseButton,
 } from './chart/chartComponents';
 
+export * from '../context/index.js';
+
 export { plugin } from './chart/mainChart/customPlugin.js';
 export { options } from './chart/mainChart/options.js';
