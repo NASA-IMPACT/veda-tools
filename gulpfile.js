@@ -4,7 +4,22 @@ const fs = require('fs');
 const path = require('path');
 
 /**
- * NEW: Runs the package.json consolidation script.
+ *  Install all the dependencies
+ */
+function installRootDeps(cb) {
+  console.log('📦 Installing root project dependencies...');
+  exec('yarn install', (err, stdout, stderr) => {
+    if (err) {
+      console.error(stderr);
+      return cb(err);
+    }
+    console.log(stdout);
+    console.log('✅ Root dependencies installed successfully.');
+    cb();
+  });
+}
+/**
+ *  Runs the package.json consolidation script.
  */
 function consolidatePackages(cb) {
   console.log('🔧 Consolidating package.json from consolidate.js...');
@@ -16,6 +31,7 @@ function consolidatePackages(cb) {
     cb(err); // Signal task completion to Gulp
   });
 }
+
 /**
  * NEW: Commits package.json if it has been changed by the consolidation script.
  * This is designed to run in a CI/CD pipeline.
@@ -187,6 +203,7 @@ function buildMain(cb) {
 exports.default = series(
   initSubmodules,
   consolidatePackages,
+  installRootDeps,
   buildMain,
   commitPackageJson
 );
