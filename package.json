@@ -29,31 +29,8 @@
     "./components/method": {
       "import": "./dist/components/method/index.js",
       "require": "./dist/components/method/index.js"
-    },
-    "./interfaces/emit": {
-      "import": "./dist/components/interfaces/emit/index.js",
-      "require": "./dist/components/interfaces/emit/index.js"
-    },
-    "./interfaces/noaa": {
-      "import": "./dist/components/interfaces/noaa/index.js",
-      "require": "./dist/components/interfaces/noaa/index.js"
-    },
-    "./interfaces/goes": {
-      "import": "./dist/components/interfaces/goes/index.js",
-      "require": "./dist/components/interfaces/goes/index.js"
-    },
-    "./interfaces/nist": {
-      "import": "./dist/components/interfaces/nist/index.js",
-      "require": "./dist/components/interfaces/nist/index.js"
-    },
-    "./interfaces/urban": {
-      "import": "./dist/components/interfaces/urban/index.js",
-      "require": "./dist/components/interfaces/urban/index.js"
-    },
-    "./interfaces/cloudBrowse": {
-      "import": "./dist/components/interfaces/cloudBrowse/index.js",
-      "require": "./dist/components/interfaces/cloudBrowse/index.js"
     }
+ 
   },
   "targets": {
     "main": {
@@ -77,42 +54,6 @@
     "core": {
       "source": "src/components/core/index.ts",
       "distDir": "dist/components/core",
-      "context": "node",
-      "isLibrary": true
-    },
-    "emit": {
-      "source": "src/components/interfaces/emit/src/lib/index.ts",
-      "distDir": "dist/components/interfaces/emit",
-      "context": "node",
-      "isLibrary": true
-    },
-    "noaa": {
-      "source": "src/components/interfaces/noaa/src/lib/index.ts",
-      "distDir": "dist/components/interfaces/noaa",
-      "context": "node",
-      "isLibrary": true
-    },
-    "goes": {
-      "source": "src/components/interfaces/goes/goes-plume-viewer/src/lib/index.ts",
-      "distDir": "dist/components/interfaces/goes",
-      "context": "node",
-      "isLibrary": true
-    },
-    "nist": {
-      "source": "src/components/interfaces/nist/nist-interface/src/lib/index.ts",
-      "distDir": "dist/components/interfaces/nist",
-      "context": "node",
-      "isLibrary": true
-    },
-    "urban": {
-      "source": "src/components/interfaces/urban/urban-dashboard/src/lib/index.ts",
-      "distDir": "dist/components/interfaces/urban",
-      "context": "node",
-      "isLibrary": true
-    },
-    "cloudBrowse": {
-      "source": "src/components/interfaces/cloudBrowse/src/components/index.js",
-      "distDir": "dist/components/interfaces/cloudBrowse",
       "context": "node",
       "isLibrary": true
     }
