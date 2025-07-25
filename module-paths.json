@@ -1,3 +1,4 @@
 {
-  "emit": "src/components/interfaces/emit/package.json"
+  "emit": "src/components/interfaces/emit/package.json",
+  "noaa": "src/components/interfaces/noaa/package.json"
 }
