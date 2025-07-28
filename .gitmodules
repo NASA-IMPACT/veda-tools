@@ -1,7 +1,7 @@
 [submodule "src/components/interfaces/noaa"]
 	path = src/components/interfaces/noaa
 	url = https://github.com/US-GHG-Center/ghgc-noaa-interface.git
-	branch = veda-tools
+	branch = noaa/create-library
 [submodule "src/components/interfaces/emit"]
 	path = src/components/interfaces/emit
 	url = https://github.com/US-GHG-Center/custom-emit-interface.git
@@ -9,7 +9,7 @@
 [submodule "src/components/interfaces/goes"]
 	path = src/components/interfaces/goes
 	url = https://github.com/US-GHG-Center/custom-interfaces.git
-	branch = goes/veda-tools
+	branch = goes/create-library
 [submodule "src/components/interfaces/nist"]
 	path = src/components/interfaces/nist
 	url = https://github.com/US-GHG-Center/custom-interfaces.git
