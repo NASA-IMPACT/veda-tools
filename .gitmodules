@@ -13,11 +13,11 @@
 [submodule "src/components/interfaces/nist"]
 	path = src/components/interfaces/nist
 	url = https://github.com/US-GHG-Center/custom-interfaces.git
-	branch = nist/veda-tools
+	branch = nist/create-library
 [submodule "src/components/interfaces/urban"]
 	path = src/components/interfaces/urban
 	url = https://github.com/US-GHG-Center/custom-interfaces.git
-	branch = urban/veda-tools
+	branch = urban/create-library
 [submodule "src/components/interfaces/cloudBrowse"]
 	path = src/components/interfaces/cloudBrowse
 	url = https://github.com/US-GHG-Center/ghgc-s3browse.git

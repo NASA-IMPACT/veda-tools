@@ -1,5 +1,8 @@
 {
   "emit": "src/components/interfaces/emit/package.json",
   "noaa": "src/components/interfaces/noaa/package.json",
-  "goes": "src/components/interfaces/goes/goes-plume-viewer/package.json"
+  "goes": "src/components/interfaces/goes/goes-plume-viewer/package.json",
+  "nist": "src/components/interfaces/nist/nist-interface/package.json",
+  "urban": "src/components/interfaces/urban/urban-dashboard/package.json",
+  "cloudBrowse": "src/components/interfaces/cloudBrowse/package.json"
 }
