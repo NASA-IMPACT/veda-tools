@@ -37,6 +37,10 @@
     "./interfaces/noaa": {
       "import": "./dist/components/interfaces/noaa/index.js",
       "require": "./dist/components/interfaces/noaa/index.js"
+    },
+    "./interfaces/goes": {
+      "import": "./dist/components/interfaces/goes/index.js",
+      "require": "./dist/components/interfaces/goes/index.js"
     }
   },
   "targets": {
@@ -73,6 +77,12 @@
     "noaa": {
       "source": "src/components/interfaces/noaa/src/lib/index.ts",
       "distDir": "dist/components/interfaces/noaa",
+      "context": "node",
+      "isLibrary": true
+    },
+    "goes": {
+      "source": "src/components/interfaces/goes/goes-plume-viewer/src/lib/index.ts",
+      "distDir": "dist/components/interfaces/goes",
       "context": "node",
       "isLibrary": true
     }
@@ -120,6 +130,7 @@
     "conventional-changelog-conventionalcommits": "8.0.0"
   },
   "dependencies": {
+    "@date-io/moment": "^3.0.0",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
