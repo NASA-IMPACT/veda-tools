@@ -2,181 +2,355 @@ const fs = require('fs');
 const path = require('path');
 const semver = require('semver');
 
-// --- Define paths ---
-const ROOT_DIR = path.resolve(__dirname, '.');
-const MAIN_PACKAGE_PATH = path.join(ROOT_DIR, 'package.json');
-const CONFIG_PATH = path.join(ROOT_DIR, 'module-paths.json');
-
-// --- NEW: List of packages to enforce as peer dependencies ---
-const PEER_DEPS_TO_PROMOTE = new Set(['react', 'react-dom', '@mui/material']);
-
-/**
- * Merges dependencies. If a package doesn't exist in mainDeps, it's added.
- * If it exists, it's only updated if the new version is higher.
- * @param {object} mainDeps - The main dependencies object to merge into.
- * @param {object} subDeps - The submodule dependencies object.
- */
-function mergeDependencies(mainDeps, subDeps) {
-  if (!subDeps) return;
-  for (const [pkg, version] of Object.entries(subDeps)) {
-    if (
-      !mainDeps[pkg] ||
-      semver.gt(semver.coerce(version), semver.coerce(mainDeps[pkg]))
-    ) {
-      mainDeps[pkg] = version;
+//Config for Consolidations
+class Config {
+  constructor(options = {}) {
+    this.rootDir = options.rootDir || path.resolve(__dirname, '.');
+    this.mainPackagePath = path.join(this.rootDir, 'package.json');
+    this.configPath = path.join(this.rootDir, 'module_paths.json');
+    this.peerDepsToPromote = new Set(
+      options.peerDepsToPromote || ['react', 'react-dom', '@mui/material']
+    );
+    this.entryLocations = options.entryLocations || [
+      'src/lib',
+      'src/components',
+    ];
+    this.entryFiles = options.entryFiles || ['index.js', 'index.ts'];
+  }
+}
+// File Utilities
+class FileUtils {
+  static readJson(filePath) {
+    try {
+      return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+    } catch (error) {
+      throw new Error(`Failed to read ${filePath}: ${error.message}`);
     }
+  }
+  static writeJson(filePath, data) {
+    try {
+      fs.writeFileSync(filePath, JSON.stringify(data, null, 2) + '\n');
+    } catch (error) {
+      throw new Error(`Failed to write in ${filePath}: ${error.message}`);
+    }
+  }
+  static exists(filePath) {
+    return fs.existsSync(filePath);
+  }
+}
+class ConflictCollector {
+  constructor() {
+    this.conflicts = [];
+  }
+  addConflict(message) {
+    this.conflicts.push(message);
+  }
+  hasConflicts() {
+    return this.conflicts.length > 0;
+  }
+  getReport() {
+    const header =
+      '❌ Build aborted. Major version conflicts detected. Please resolve the following issues:';
+    return [header, ...this.conflicts.map((c) => `  - ${c}`)].join('\n');
   }
 }
 
-/**
- * Finds the entry point file within a submodule's source directory.
- * @param {string} submoduleDir - The absolute path to the submodule's directory.
- * @returns {string} The relative path to the source file.
- */
-function findSourceFile(submoduleDir) {
-  // 1. Define the paths to check in order of priority
-  const locations = [path.join('src', 'lib'), path.join('src', 'components')];
-  const entryFiles = ['index.js', 'index.ts'];
-
-  // 2. Check for 'src/lib/index.ts' first
-  for (const loc of locations) {
-    for (const file of entryFiles) {
-      const fullPath = path.join(submoduleDir, loc, file);
-      // If the file exists, we've found our match. Return its path immediately.
-      if (fs.existsSync(fullPath)) {
-        return path.relative(ROOT_DIR, fullPath).replace(/\\/g, '/');
-      }
-    }
-  }
-
-  // 4. If neither is found, show a warning and return a default fallback path
-  console.warn(
-    `⚠️ Could not find entry file for  ${submoduleDir}. Using default.`
-  );
-
-  return null;
-}
-
-async function run() {
-  console.log('🚀 Merging submodule packages into main package.json...');
-
-  // 1. Read the main package.json and the submodule config file
-  const mainPackageJson = JSON.parse(
-    fs.readFileSync(MAIN_PACKAGE_PATH, 'utf-8')
-  );
-  const submoduleConfig = JSON.parse(fs.readFileSync(CONFIG_PATH, 'utf-8'));
-  const submoduleNames = Object.keys(submoduleConfig);
-
-  // Initialize with dependencies from the main package.json to preserve them.
-  const consolidatedDeps = {
-    dependencies: { ...(mainPackageJson.dependencies || {}) },
-    devDependencies: { ...(mainPackageJson.devDependencies || {}) },
-    peerDependencies: { ...(mainPackageJson.peerDependencies || {}) },
-  };
-
-  // Preserve the original, non-interface targets and exports
-  const baseTargets = {
-    main: mainPackageJson.targets.main,
-    ui: mainPackageJson.targets.ui,
-    method: mainPackageJson.targets.method,
-    core: mainPackageJson.targets.core,
-  };
-  const baseExports = {
-    '.': mainPackageJson.exports['.'],
-    './components/core': mainPackageJson.exports['./components/core'],
-    './components/ui': mainPackageJson.exports['./components/ui'],
-    './components/method': mainPackageJson.exports['./components/method'],
-  };
-
-  console.log(
-    `🔍 Processing ${submoduleNames.length} interface submodules from config:`,
-    submoduleNames.join(', ')
-  );
-
-  // 2. Process each submodule from the configuration file
-  for (const submoduleName of submoduleNames) {
-    const relativePkgPath = submoduleConfig[submoduleName];
-    const submodulePkgPath = path.join(ROOT_DIR, relativePkgPath);
-
-    if (!fs.existsSync(submodulePkgPath)) {
-      console.warn(
-        `❗️ Warning: package.json not found at configured path: ${relativePkgPath}. Skipping.`
+class DependencyUtils {
+  static validate(allSubmodulePackages, conflictCollector) {
+    const allDepsMap = new Map();
+    // 1. Collect all versions of each dependency from all submodules
+    for (const { name, pkg } of allSubmodulePackages) {
+      ['dependencies', 'devDependencies', 'peerDependencies'].forEach(
+        (depType) => {
+          if (!pkg[depType]) return;
+          for (const [depName, depVersion] of Object.entries(pkg[depType])) {
+            if (!allDepsMap.has(depName)) {
+              // Store an array of objects, each containing the version and its source
+              allDepsMap.set(depName, []);
+            }
+            allDepsMap.get(depName).push({ version: depVersion, source: name });
+          }
+        }
       );
-      continue;
     }
 
-    const submodulePkg = JSON.parse(fs.readFileSync(submodulePkgPath, 'utf-8'));
-    const effectiveSubmodulePath = path.dirname(submodulePkgPath);
+    // 2. Check for major version conflicts in the collected map
+    for (const [depName, versionInfos] of allDepsMap.entries()) {
+      if (versionInfos.length > 1) {
+        const majorVersions = new Set(
+          [...versionInfos].map((info) =>
+            semver.major(semver.coerce(info.version))
+          )
+        );
+        if (majorVersions.size > 1) {
+          const details = versionInfos
+            .map((info) => `"${info.source}"=>"${info.version}"`)
+            .join(' ;; ');
 
-    // --- NEW: Promote specified packages from dependencies to peerDependencies ---
-    if (submodulePkg.dependencies) {
-      for (const pkgName of PEER_DEPS_TO_PROMOTE) {
-        if (submodulePkg.dependencies[pkgName]) {
-          const depToPromote = {
-            [pkgName]: submodulePkg.dependencies[pkgName],
-          };
-          mergeDependencies(consolidatedDeps.peerDependencies, depToPromote);
-          // Remove from original dependencies to prevent it from being added there
-          delete submodulePkg.dependencies[pkgName];
+          conflictCollector.addConflict(
+            `Dependency '${depName}' has a major version conflict: ${details}`
+          );
         }
       }
     }
+  }
 
-    // Merge the remaining dependencies, strictly respecting their original type
-    mergeDependencies(consolidatedDeps.dependencies, submodulePkg.dependencies);
-    mergeDependencies(
+  static merge(target, source) {
+    if (!source) return;
+    for (const [pkg, version] of Object.entries(source)) {
+      if (!target[pkg] || this.isVersionHigher(version, target[pkg])) {
+        target[pkg] = version;
+      }
+    }
+  }
+  static isVersionHigher(newVersion, currentVersion) {
+    try {
+      return semver.gt(
+        semver.coerce(newVersion),
+        semver.coerce(currentVersion)
+      );
+    } catch (error) {
+      console.warn(
+        `Version comparision failed for ${newVersion} vs ${currentVersion}`
+      );
+      return false;
+    }
+  }
+  static sortDependencies(packagJson) {
+    ['dependencies', 'devDependencies', 'peerDependencies'].forEach((key) => {
+      if (packagJson[key]) {
+        packagJson[key] = Object.fromEntries(
+          Object.entries(packagJson[key]).sort(([a], [b]) => a.localeCompare(b))
+        );
+      }
+    });
+  }
+}
+
+class SourceFileFinder {
+  constructor(config) {
+    this.config = config;
+  }
+  find(submoduleDir) {
+    for (const location of this.config.entryLocations) {
+      for (const file of this.config.entryFiles) {
+        const fullPath = path.join(submoduleDir, location, file);
+        if (FileUtils.exists(fullPath)) {
+          return path
+            .relative(this.config.rootDir, fullPath)
+            .replace(/\\/g, '/');
+        }
+      }
+    }
+    console.warn(`Couldnot find entry file for ${submoduleDir}`);
+  }
+}
+
+class SubmoduleProcessor {
+  constructor(config) {
+    this.config = config;
+    this.sourceFileFinder = new SourceFileFinder(config);
+  }
+
+  process(submoduleName, relativePkgPath, consolidatedDeps, packageConfig) {
+    const submodulePkgPath = path.join(this.config.rootDir, relativePkgPath);
+
+    if (!FileUtils.exists(submodulePkgPath)) {
+      console.warn(`Package.json not found at ${relativePkgPath}`);
+      return false;
+    }
+    const submodulePkg = FileUtils.readJson(submodulePkgPath);
+    const submoduleDir = path.dirname(submodulePkgPath);
+
+    this._promoteToPeerDeps(submodulePkg, consolidatedDeps);
+
+    DependencyUtils.merge(
+      consolidatedDeps.dependencies,
+      submodulePkg.dependencies
+    );
+    DependencyUtils.merge(
       consolidatedDeps.devDependencies,
       submodulePkg.devDependencies
     );
-    mergeDependencies(
+    DependencyUtils.merge(
       consolidatedDeps.peerDependencies,
       submodulePkg.peerDependencies
     );
 
-    // Generate dynamic exports and targets entries
-    baseExports[`./interfaces/${submoduleName}`] = {
+    this._addPackageConfig(submoduleName, submoduleDir, packageConfig);
+    return true;
+  }
+
+  _promoteToPeerDeps(submodulePkg, consolidatedDeps) {
+    if (!submodulePkg.dependencies) return;
+
+    for (const pkgName of this.config.peerDepsToPromote) {
+      if (submodulePkg.dependencies[pkgName]) {
+        // Add to peer dependencies
+        const depToPromote = { [pkgName]: submodulePkg.dependencies[pkgName] };
+        DependencyUtils.merge(consolidatedDeps.peerDependencies, depToPromote);
+
+        // Remove from regular dependencies
+        delete submodulePkg.dependencies[pkgName];
+      }
+    }
+  }
+
+  _addPackageConfig(submoduleName, submoduleDir, packageConfig) {
+    // Add export
+    packageConfig.exports[`./interfaces/${submoduleName}`] = {
       import: `./dist/components/interfaces/${submoduleName}/index.js`,
       require: `./dist/components/interfaces/${submoduleName}/index.js`,
     };
 
-    const sourceFilePath = findSourceFile(effectiveSubmodulePath);
-    baseTargets[submoduleName] = {
+    // Add target
+    const sourceFilePath = this.sourceFileFinder.find(submoduleDir);
+    packageConfig.targets[submoduleName] = {
       source: sourceFilePath,
       distDir: `dist/components/interfaces/${submoduleName}`,
       context: 'node',
       isLibrary: true,
     };
   }
-
-  // 3. Update main package.json with the merged data
-  mainPackageJson.dependencies = consolidatedDeps.dependencies;
-  mainPackageJson.devDependencies = consolidatedDeps.devDependencies;
-  mainPackageJson.peerDependencies = consolidatedDeps.peerDependencies;
-
-  // Sort dependencies alphabetically for consistency
-  Object.keys(mainPackageJson).forEach((key) => {
-    if (key.toLowerCase().includes('dependencies')) {
-      mainPackageJson[key] = Object.fromEntries(
-        Object.entries(mainPackageJson[key]).sort(([a], [b]) =>
-          a.localeCompare(b)
-        )
-      );
-    }
-  });
-
-  mainPackageJson.exports = baseExports;
-  mainPackageJson.targets = baseTargets;
-
-  // 4. Write the updated package.json back to disk
-  fs.writeFileSync(
-    MAIN_PACKAGE_PATH,
-    JSON.stringify(mainPackageJson, null, 2) + '\n'
-  );
-
-  console.log('✅ Successfully merged dependencies and updated package.json!');
 }
 
-run().catch((error) => {
-  console.error('❌ An error occurred during consolidation:', error);
-  process.exit(1);
-});
+class PackageConsolidator {
+  constructor(config = new Config()) {
+    this.config = config;
+    this.processor = new SubmoduleProcessor(config);
+  }
+  async run() {
+    console.log('Merging submodule package.json into main packages.json');
+
+    const mainPackageJson = FileUtils.readJson(this.config.mainPackagePath);
+    const submoduleConfig = FileUtils.readJson(this.config.configPath);
+    const submoduleNames = Object.keys(submoduleConfig);
+
+    //collect all the submodule data
+    const allSubmodulePackages = [];
+    for (const submoduleName of submoduleNames) {
+      const relativePkgPath = submoduleConfig[submoduleName];
+      const submodulePkgPath = path.join(this.config.rootDir, relativePkgPath);
+      if (FileUtils.exists(submodulePkgPath)) {
+        allSubmodulePackages.push({
+          name: submoduleName,
+          pkg: FileUtils.readJson(submodulePkgPath),
+          dir: path.dirname(submodulePkgPath),
+        });
+      } else {
+        console.warn(`Package.json not found at ${relativePkgPath}`);
+      }
+    }
+    const conflictCollector = new ConflictCollector();
+    DependencyUtils.validate(allSubmodulePackages, conflictCollector);
+    if (conflictCollector.hasConflicts()) {
+      throw new Error(conflictCollector.getReport());
+    }
+    console.log('✅ No major version conflicts found. Proceeding with merge.');
+
+    const consolidatedDeps = {
+      dependencies: {
+        ...(mainPackageJson.dependencies || {}),
+      },
+      devDependencies: {
+        ...(mainPackageJson.devDependencies || {}),
+      },
+      peerDependencies: {
+        ...(mainPackageJson.peerDependencies || {}),
+      },
+    };
+    const packageConfig = {
+      exports: {
+        '.': mainPackageJson.exports?.['.'],
+        './components/core': mainPackageJson.exports?.['./components/core'],
+        './components/ui': mainPackageJson.exports?.['./components/ui'],
+        './components/method': mainPackageJson.exports?.['./components/method'],
+      },
+      targets: {
+        main: mainPackageJson.targets?.main,
+        ui: mainPackageJson.targets?.ui,
+        method: mainPackageJson.targets?.method,
+        core: mainPackageJson.targets?.core,
+      },
+    };
+
+    console.log(
+      `🔍 Processing ${submoduleNames.length} interface submodules:`,
+      submoduleNames.join(', ')
+    );
+
+    for (const submoduleName of submoduleNames) {
+      const relativePkgPath = submoduleConfig[submoduleName];
+      this.processor.process(
+        submoduleName,
+        relativePkgPath,
+        consolidatedDeps,
+        packageConfig
+      );
+    }
+    mainPackageJson.dependencies = consolidatedDeps.dependencies;
+    mainPackageJson.devDependencies = consolidatedDeps.devDependencies;
+    mainPackageJson.peerDependencies = consolidatedDeps.peerDependencies;
+    mainPackageJson.exports = packageConfig.exports;
+    mainPackageJson.targets = packageConfig.targets;
+
+    DependencyUtils.sortDependencies(mainPackageJson);
+
+    FileUtils.writeJson(this.config.mainPackagePath, mainPackageJson);
+
+    console.log(
+      '✅ Successfully merged dependencies and updated package.json!'
+    );
+  }
+
+  // Allow runtime configuration changes
+  setPeerDepsToPromote(deps) {
+    this.config.peerDepsToPromote = new Set(deps);
+    return this;
+  }
+
+  setEntryLocations(locations) {
+    this.config.entryLocations = locations;
+    this.processor = new SubmoduleProcessor(this.config); // Recreate processor
+    return this;
+  }
+}
+async function run() {
+  // Basic usage
+  const consolidator = new PackageConsolidator();
+  await consolidator.run();
+
+  // Custom usage example:
+  /*
+  const customConfig = new Config({
+    peerDepsToPromote: ['react', 'react-dom', '@mui/material', 'lodash'],
+    entryLocations: ['src/lib', 'src/components', 'lib'],
+    entryFiles: ['index.ts', 'index.js', 'main.ts']
+  });
+
+  const consolidator = new PackageConsolidator(customConfig);
+  await consolidator.run();
+  
+  // Or chain configuration:
+  // await new PackageConsolidator()
+  //   .setPeerDepsToPromote(['react', 'react-dom', 'vue'])
+  //   .setEntryLocations(['src', 'lib'])
+  //   .run();
+  */
+}
+
+// Export for module usage
+module.exports = {
+  PackageConsolidator,
+  Config,
+  FileUtils,
+  DependencyUtils,
+};
+
+// Run if called directly
+if (require.main === module) {
+  run().catch((error) => {
+    console.error('❌ An error occurred during consolidation:', error);
+    process.exit(1);
+  });
+}
