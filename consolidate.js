@@ -84,8 +84,8 @@ class DependencyUtils {
         );
         if (majorVersions.size > 1) {
           const details = versionInfos
-            .map((info) => `"${info.source}"=>"${info.version}"`)
-            .join(' ;; ');
+            .map((info) => `${info.source}:${info.version}`)
+            .join(' || ');
 
           conflictCollector.addConflict(
             `Dependency '${depName}' has a major version conflict: ${details}`
