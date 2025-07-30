@@ -1,4 +1,4 @@
-const debug = process.argv.includes('--debug');
+const debug = process?.argv?.includes('--debug')||false;
 
 module.exports = {
   hooks: {
