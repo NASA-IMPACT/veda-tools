@@ -54,6 +54,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
+          fetch-depth: 0
       - name: Read Node.js version from .nvmrc
         id: nvm
         run: echo "::set-output name=NODE_VERSION::$(cat .nvmrc)"
