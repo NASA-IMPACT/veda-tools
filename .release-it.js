@@ -18,7 +18,7 @@ module.exports = {
     // changelog: 'git log --pretty=format:%s ${latestTag}...HEAD' // this is overridden by the @release-it/conventional-changelog's changelog
   },
   github: {
-    release: false ,
+    release: debug ? false : true ,
     releaseName: "v${version}",
     autoGenerate: false,
     releaseNotes: getReleaseNotes,
