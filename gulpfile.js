@@ -49,8 +49,8 @@ function commitPackageJson(cb) {
       const actorEmail = `${actor}@users.noreply.github.com`;
 
       // Configure git user with the actor's identity
-      execSync(`git config --global user.name "${actor}"`);
-      execSync(`git config --global user.email "${actorEmail}"`);
+      execSync(`git config  user.name "${actor}"`);
+      execSync(`git config  user.email "${actorEmail}"`);
 
       // Stage and commit the file
       execSync('git add package.json');
