@@ -74,9 +74,17 @@ module.exports = {
 }
 
 // helpers
-
 function getReleaseNotes(config) {
-  if (!config || !config.changelog) return "🦗";
+  if (!config) {
+    console.log('Config is null/undefined, returning default release notes');
+    return "## What's changed on version:\n🦗 No changelog available";
+  }
+  
+  if (!config.changelog) {
+    console.log('Config.changelog is null/undefined, returning default release notes');
+    return "## What's changed on version:\n🦗 No changelog available";
+  }
+  
   const changelog = `## What's changed on version:\n` + config.changelog;
   return changelog;
 }
