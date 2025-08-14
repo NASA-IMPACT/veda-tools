@@ -1,7 +1,7 @@
 {
   "name": "@teamimpact/veda-tools",
   "description": "A React UI component library to build custom-interfaces for GIS application.",
-  "version": "0.0.1-beta.0",
+  "version": "0.1.0-alpha.7",
   "author": "<sanzog03@gmail.com>",
   "repository": {
     "type": "git",
@@ -13,52 +13,117 @@
     "access": "public"
   },
   "homepage": "https://github.com/NASA-IMPACT/veda-tools.git",
-  "main": "dist/lib/main.js",
-  "source": "src/components/index.js",
-  "module": "dist/lib/module.js",
-  "dependencies": {
-    "@date-io/moment": "^3.0.0",
-    "@emotion/react": "^11.13.3",
-    "@emotion/styled": "^11.13.0",
-    "@fortawesome/fontawesome-svg-core": "^6.6.0",
-    "@fortawesome/free-brands-svg-icons": "^6.6.0",
-    "@fortawesome/free-regular-svg-icons": "^6.6.0",
-    "@fortawesome/free-solid-svg-icons": "^6.6.0",
-    "@fortawesome/react-fontawesome": "^0.2.2",
-    "@mui/icons-material": "^6.1.6",
-    "@mui/material": "^6.1.6",
-    "@mui/x-date-pickers": "^7.22.0",
-    "@testing-library/jest-dom": "^5.14.1",
-    "@testing-library/react": "^13.0.0",
-    "@testing-library/user-event": "^13.2.1",
-    "@turf/turf": "^7.1.0",
-    "@types/jest": "^27.0.1",
-    "@types/node": "^16.7.13",
-    "@types/react": "^18.0.0",
-    "@types/react-dom": "^18.0.0",
-    "chart.js": "^4.4.3",
-    "chartjs-adapter-luxon": "^1.3.1",
-    "chartjs-plugin-annotation": "^3.0.1",
-    "chartjs-plugin-zoom": "^2.0.1",
-    "d3": "^7.9.0",
-    "luxon": "^3.5.0",
-    "mapbox-gl": "^3.7.0",
-    "mapboxgl-timeline": "^1.0.2",
-    "moment": "^2.30.1",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-loader-spinner": "^6.1.6",
-    "react-resizable-panels": "^2.1.1",
-    "react-router-dom": "^6.27.0",
-    "styled-components": "^6.1.13",
-    "typescript": "^4.4.2",
-    "uuid": "^11.0.3",
-    "web-vitals": "^2.1.0"
+  "exports": {
+    ".": {
+      "import": "./dist/main/index.js",
+      "require": "./dist/main/index.js"
+    },
+    "./components/core": {
+      "import": "./dist/components/core/index.js",
+      "require": "./dist/components/core/index.js"
+    },
+    "./components/ui": {
+      "import": "./dist/components/ui/index.js",
+      "require": "./dist/components/ui/index.js"
+    },
+    "./components/method": {
+      "import": "./dist/components/method/index.js",
+      "require": "./dist/components/method/index.js"
+    },
+    "./interfaces/emit": {
+      "import": "./dist/components/interfaces/emit/index.js",
+      "require": "./dist/components/interfaces/emit/index.js"
+    },
+    "./interfaces/noaa": {
+      "import": "./dist/components/interfaces/noaa/index.js",
+      "require": "./dist/components/interfaces/noaa/index.js"
+    },
+    "./interfaces/goes": {
+      "import": "./dist/components/interfaces/goes/index.js",
+      "require": "./dist/components/interfaces/goes/index.js"
+    },
+    "./interfaces/nist": {
+      "import": "./dist/components/interfaces/nist/index.js",
+      "require": "./dist/components/interfaces/nist/index.js"
+    },
+    "./interfaces/urban": {
+      "import": "./dist/components/interfaces/urban/index.js",
+      "require": "./dist/components/interfaces/urban/index.js"
+    },
+    "./interfaces/cloudBrowse": {
+      "import": "./dist/components/interfaces/cloudBrowse/index.js",
+      "require": "./dist/components/interfaces/cloudBrowse/index.js"
+    }
+  },
+  "targets": {
+    "main": {
+      "source": "src/lib/index.ts",
+      "distDir": "dist/main",
+      "context": "node",
+      "isLibrary": true
+    },
+    "ui": {
+      "source": "src/components/ui/index.ts",
+      "distDir": "dist/components/ui",
+      "context": "node",
+      "isLibrary": true
+    },
+    "method": {
+      "source": "src/components/method/index.ts",
+      "distDir": "dist/components/method",
+      "context": "node",
+      "isLibrary": true
+    },
+    "core": {
+      "source": "src/components/core/index.ts",
+      "distDir": "dist/components/core",
+      "context": "node",
+      "isLibrary": true
+    },
+    "emit": {
+      "source": "src/components/interfaces/emit/src/lib/index.ts",
+      "distDir": "dist/components/interfaces/emit",
+      "context": "node",
+      "isLibrary": true
+    },
+    "noaa": {
+      "source": "src/components/interfaces/noaa/src/lib/index.ts",
+      "distDir": "dist/components/interfaces/noaa",
+      "context": "node",
+      "isLibrary": true
+    },
+    "goes": {
+      "source": "src/components/interfaces/goes/goes-plume-viewer/src/lib/index.ts",
+      "distDir": "dist/components/interfaces/goes",
+      "context": "node",
+      "isLibrary": true
+    },
+    "nist": {
+      "source": "src/components/interfaces/nist/nist-interface/src/lib/index.ts",
+      "distDir": "dist/components/interfaces/nist",
+      "context": "node",
+      "isLibrary": true
+    },
+    "urban": {
+      "source": "src/components/interfaces/urban/urban-dashboard/src/lib/index.ts",
+      "distDir": "dist/components/interfaces/urban",
+      "context": "node",
+      "isLibrary": true
+    },
+    "cloudBrowse": {
+      "source": "src/components/interfaces/cloudBrowse/src/components/index.js",
+      "distDir": "dist/components/interfaces/cloudBrowse",
+      "context": "node",
+      "isLibrary": true
+    }
   },
   "scripts": {
     "start": "parcel",
+    "build-lib": "yarn gulp",
     "build": "parcel build",
-    "build-lib": "parcel build ./src/components/index.js --dist-dir=dist/lib",
+    "build:main": "parcel build main",
+    "build:components": "parcel build components",
+    "clean": "rm -rf node_modules  dist yarn.lock package-lock.json .parcel-cache  && yarn cache clean",
     "release": "release-it --ci",
     "release-beta": "release-it --preRelease=beta --ci",
     "pre-release-alpha": "release-it --preRelease=alpha --ci --no-git.requireBranch",
@@ -94,15 +159,93 @@
     "styled-components": "^5",
     "conventional-changelog-conventionalcommits": "8.0.0"
   },
+  "dependencies": {
+    "@date-io/moment": "^3.0.0",
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@fortawesome/fontawesome-svg-core": "^6.6.0",
+    "@fortawesome/free-brands-svg-icons": "^6.6.0",
+    "@fortawesome/free-regular-svg-icons": "^6.6.0",
+    "@fortawesome/free-solid-svg-icons": "^6.6.0",
+    "@fortawesome/react-fontawesome": "^0.2.2",
+    "@mui/icons-material": "^6.1.6",
+    "@mui/x-charts": "^7.13.0",
+    "@mui/x-data-grid": "^5.13.0",
+    "@mui/x-date-pickers": "7.22.0",
+    "@react-pdf-viewer/core": "^3.12.0",
+    "@react-pdf-viewer/default-layout": "^3.12.0",
+    "@react-pdf-viewer/toolbar": "^3.12.0",
+    "@reduxjs/toolkit": "^1.8.3",
+    "@swc/helpers": "^0.5.3",
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^13.3.0",
+    "@testing-library/user-event": "^14.3.0",
+    "@turf/bbox-polygon": "^7.2.0",
+    "@turf/boolean-intersects": "^7.2.0",
+    "@turf/length": "^7.2.0",
+    "@turf/turf": "^7.1.0",
+    "chart.js": "4.4.3",
+    "chartjs-adapter-luxon": "1.3.1",
+    "chartjs-plugin-annotation": "3.0.1",
+    "chartjs-plugin-zoom": "2.0.1",
+    "d3": "^7.9.0",
+    "date-fns": "^3.6.0",
+    "fast-xml-parser": "^4.0.9",
+    "file-saver": "^2.0.5",
+    "font-awesome": "^4.7.0",
+    "font-awesome-icons": "^1.6.0",
+    "gulp": "^5.0.1",
+    "jquery": "^3.7.1",
+    "jszip": "^3.10.1",
+    "luxon": "^3.5.0",
+    "mapbox-gl": "^3.7.0",
+    "mapboxgl-timeline": "^1.0.2",
+    "material-ui-popup-state": "^5.1.2",
+    "moment": "^2.30.1",
+    "ncp": "^2.0.0",
+    "pdfjs-dist": "^3.5.141",
+    "prettier": "^2.8.8",
+    "print-js": "^1.6.0",
+    "rc-progress": "^3.4.2",
+    "react-chartjs-2": "^5.2.0",
+    "react-helmet": "^6.1.0",
+    "react-icons": "^4.8.0",
+    "react-loader-spinner": "^6.1.6",
+    "react-redux": "^8.0.2",
+    "react-resizable-panels": "^2.1.1",
+    "react-router-dom": "6.27.0",
+    "react-scripts": "5.0.1",
+    "react-spinners": "^0.13.8",
+    "react-step-progress-bar": "^1.0.3",
+    "react-toastify": "^9.1.3",
+    "react-tooltip": "^5.28.0",
+    "react-zoom-pan-pinch": "^3.0.7",
+    "styled-components": "^6.1.13",
+    "tslint": "^6.1.3",
+    "typescript": "^4.4.2",
+    "uuid": "^11.0.3",
+    "web-vitals": "^5.0.1"
+  },
   "devDependencies": {
-    "@parcel/packager-raw-url": "2.13.3",
-    "@parcel/transformer-webmanifest": "2.13.3",
+    "@mui/material": "^6.1.6",
+    "@parcel/config-default": "^2.15.4",
+    "@parcel/packager-raw-url": "^2.15.2",
+    "@parcel/packager-ts": "^2.15.2",
+    "@parcel/transformer-typescript-types": "^2.15.2",
+    "@parcel/transformer-webmanifest": "^2.15.2",
     "@release-it/conventional-changelog": "^10.0.0",
+    "@swc/helpers": "^0.5.3",
+    "@types/jest": "^27.0.1",
+    "@types/node": "^24.0.1",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
     "babel-jest": "^27.4.2",
     "babel-preset-react-app": "^10.0.1",
     "browserslist": ">= 4",
     "conventional-changelog-conventionalcommits": "^8.0.0",
     "conventional-recommended-bump": "^11.0.0",
+    "dotenv-cli": "^8.0.0",
+    "env-cmd": "^10.1.0",
     "eslint": "^8.3.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-config-react-app": "^7.0.1",
@@ -111,27 +254,23 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "^27.4.3",
     "jest-watch-typeahead": "^1.0.0",
-    "parcel": "^2.13.3",
+    "parcel": "^2.15.2",
+    "parcel-reporter-static-files-copy": "^1.5.3",
     "parcel-resolver-tspaths": "^0.0.9",
     "postcss": ">= 8",
     "postcss-normalize": "^13.0.1",
     "prettier": "^3.4.2",
     "process": "^0.11.10",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "release-it": "^18.1.2",
-    "semver": "^7.7.1"
+    "semver": "^7.7.1",
+    "typescript": "^4.4.2"
   },
   "peerDependencies": {
-    "@mui/icons-material": "^6.1.6",
     "@mui/material": "^6.1.6",
-    "@mui/x-date-pickers": "^7.22.0",
-    "@types/react": "^18.0.0",
-    "@types/react-dom": "^18.0.0"
-  },
-  "targets": {
-    "custom-interfafce-app": {
-      "source": "public/index.html",
-      "context": "browser"
-    }
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "engines": {
     "node": ">=18.0.0"

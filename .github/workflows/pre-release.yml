@@ -54,6 +54,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
+          fetch-depth: 0
       - name: Read Node.js version from .nvmrc
         id: nvm
         run: echo "::set-output name=NODE_VERSION::$(cat .nvmrc)"
@@ -63,10 +64,12 @@ jobs:
           node-version: ${{ steps.nvm.outputs.NODE_VERSION }}
       - name: Install Yarn
         run: npm install -g yarn
-      - name: Install Dependencies
-        run: yarn
-      - name: Bundle Package
-        run: yarn build-lib
+      - name: Install dependencies 
+        run: yarn 
+      - name: Install dependencies  and Bundle Package
+        run: | 
+          yarn build-lib
+          git status 
       - name: Git config
         run: |
           git config user.name "${GITHUB_ACTOR}"

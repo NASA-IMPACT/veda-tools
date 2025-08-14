@@ -31,3 +31,4 @@ dist/
 
 # workflow will create this file, so ignore it to untrack it.
 .npmrc
+yarn.lock

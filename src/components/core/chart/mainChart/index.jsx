@@ -1,7 +1,7 @@
-import { ChartProvider } from '../../context/chartContext';
+import { ChartProvider } from '../../../context/chartContext';
 import './index.css';
 
-const MainChart = ({ children }) => {
+export const MainChart = ({ children }) => {
   return (
     <ChartProvider>
       <div className="chart-container">
@@ -12,4 +12,4 @@ const MainChart = ({ children }) => {
   );
 };
 
-export default MainChart;
+

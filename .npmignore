@@ -1,0 +1,10 @@
+/public
+/src/components/interfaces
+public/
+*.log
+node_modules/
+.parcel-cache/
+build/
+.env
+.vscode/
+

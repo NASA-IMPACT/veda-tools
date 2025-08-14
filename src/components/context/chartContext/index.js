@@ -1,8 +1,8 @@
 import { createContext, useContext, useRef, useState, useEffect } from 'react';
 import Chart from 'chart.js/auto';
-import { plugin } from '../components/mainChart/customPlugin';
-import { options } from '../components/mainChart/options';
-import '../components/mainChart/config';
+import { plugin } from '../../core/chart/mainChart/customPlugin';
+import { options } from '../../core/chart/mainChart/options';
+import '../../core/chart/mainChart/config';
 
 const ChartContext = createContext();
 
